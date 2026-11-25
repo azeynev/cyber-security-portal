@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Киберсигурност | Пълно професионално ръководство за защита на децата в интернет</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            background: radial-gradient(ellipse at 10% 30%, #0a2a38, #031016);
+            color: #f0f6fa;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0c3343; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #f39c12; border-radius: 10px; }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .sidebar {
+            width: 500px;
+            background: rgba(10, 40, 50, 0.96);
+            backdrop-filter: blur(14px);
+            padding: 2rem 1rem;
+            border-right: 2px solid rgba(243, 156, 18, 0.6);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+            z-index: 20;
+        }
+
+        .sidebar h2 {
+            color: #ffd966;
+            font-size: 0.95rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #f39c12;
+            padding-bottom: 0.7rem;
+        }
+
+        .total-time {
+            text-align: center;
+            background: rgba(243, 156, 18, 0.2);
+            padding: 0.6rem;
+            border-radius: 1.2rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #ffd966;
+        }
+
+        .topic-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            background: linear-gradient(95deg, #1e5a6e, #12404f);
+            border: none;
+            color: white;
+            padding: 0.75rem 0.9rem;
+            border-radius: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 0.55rem;
+            font-size: 0.75rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .topic-btn-left { display: flex; align-items: center; gap: 0.7rem; }
+        .topic-time { background: rgba(0,0,0,0.45); padding: 0.2rem 0.6rem; border-radius: 2rem; font-size: 0.7rem; font-family: monospace; }
+        .topic-btn:hover { background: linear-gradient(95deg, #e67e22, #f39c12); transform: translateX(6px); }
+        .topic-btn.active { background: linear-gradient(95deg, #f39c12, #e67e22); color: #0a2a38; box-shadow: 0 0 12px rgba(243,156,18,0.7); }
+
+        .main-content { flex: 1; padding: 2rem 2rem 3rem 2rem; overflow-y: auto; }
+        .topic { display: none; animation: fadeSlide 0.35s ease-out; }
+        .topic.active-topic { display: block; }
+        @keyframes fadeSlide { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card {
+            background: rgba(255,255,255,0.07);
+            backdrop-filter: blur(14px);
+            border-radius: 2rem;
+            padding: 2rem;
+            margin: 1.2rem 0;
+            border-left: 6px solid #f39c12;
+            box-shadow: 0 25px 40px -12px rgba(0,0,0,0.45);
+        }
+
+        .time-badge { background: #f39c12; color: #1e2a32; display: inline-block; padding: 0.3rem 1.4rem; border-radius: 40px; font-weight: bold; margin-bottom: 1.3rem; font-size: 0.85rem; }
+        h1 { font-size: 1.8rem; background: linear-gradient(135deg, #FFE0A3, #FFB347); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 0.8rem; }
+        h2 { font-size: 1.45rem; margin: 1rem 0 0.6rem; color: #ffd966; border-left: 4px solid #f39c12; padding-left: 0.9rem; }
+        h3 { font-size: 1.2rem; margin: 0.8rem 0 0.4rem; color: #f7d44a; }
+        .definition-box { background: rgba(15,55,73,0.8); border-radius: 1.2rem; padding: 1.2rem; margin: 1rem 0; border-left: 4px solid #ffb347; }
+        .example { background: rgba(26,79,98,0.8); padding: 1.2rem; border-radius: 1.2rem; margin: 1rem 0; border-left: 4px solid #f39c12; }
+        .exercise { background: rgba(42,107,124,0.8); padding: 1.2rem; border-radius: 1.2rem; margin: 1rem 0; }
+        .lesson-plan { background: rgba(14,59,72,0.85); border-radius: 1.2rem; padding: 1.2rem; margin: 1rem 0; border-left: 4px solid #2ecc71; }
+        .quiz-question { background: rgba(13,63,78,0.75); padding: 1rem; border-radius: 1.2rem; margin: 0.8rem 0; }
+        button.small-btn { background: #f39c12; border: none; padding: 0.6rem 1.5rem; border-radius: 2.5rem; font-weight: bold; cursor: pointer; margin-top: 0.8rem; transition: 0.2s; font-size: 0.9rem; color: #1e2a32; }
+        button.small-btn:hover { background: #e67e22; transform: scale(1.02); }
+        .two-columns { display: flex; flex-wrap: wrap; gap: 1.2rem; margin: 1rem 0; }
+        .col { flex: 1; background: rgba(0,0,0,0.28); padding: 1.1rem; border-radius: 1.2rem; min-width: 210px; }
+        .quote { background: rgba(31,75,94,0.9); padding: 1rem; border-radius: 1.5rem; margin: 0.8rem 0; border-left: 8px solid #ffb347; font-style: italic; }
+        .stat-highlight { font-size: 1.8rem; font-weight: 800; color: #f39c12; }
+        .source-badge { font-size: 0.7rem; opacity: 0.7; margin-top: 1rem; text-align: right; border-top: 1px solid #ffd96640; padding-top: 0.7rem; }
+        .tool-card { background: rgba(14,59,72,0.85); border-radius: 1.2rem; padding: 0.9rem 1rem; margin: 0.7rem 0; border-left: 4px solid #2ecc71; }
+        .tool-card a { color: #ffd966; text-decoration: none; border-bottom: 1px dotted #ffb347; }
+        .correct-answer { color: #2ecc71; font-weight: bold; background: rgba(46,204,113,0.2); padding: 0.2rem 0.6rem; border-radius: 0.7rem; display: inline-block; font-size: 0.85rem; }
+        .solution-box { background: rgba(46,204,113,0.15); border-left: 4px solid #2ecc71; padding: 0.8rem; margin: 0.6rem 0; border-radius: 0.8rem; }
+        .toggle-answer { cursor: pointer; color: #ffd966; text-decoration: underline; margin-top: 0.6rem; display: inline-block; font-size: 0.85rem; font-weight: 500; }
+        .answer-hidden { display: none; }
+        .answer-visible { display: block; margin-top: 0.7rem; }
+        .legal-reference { background: rgba(46,87,102,0.6); padding: 0.6rem; border-radius: 0.8rem; font-family: monospace; font-size: 0.75rem; margin: 0.5rem 0; }
+        
+        @media (max-width: 860px) {
+            .dashboard { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: static; border-right: none; border-bottom: 2px solid #f39c12; }
+            .main-content { padding: 1.5rem; }
+        }
+        ul, ol { padding-left: 1.4rem; margin: 0.5rem 0; }
+        li { margin: 0.3rem 0; }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+    <div class="sidebar">
+        <h2>🔐 ПРЕДПАЗВАНЕ НА ДЕЦАТА<br>Киберсигурност & защита на личните данни</h2>
+        <div class="total-time">📊 ОБЩА ПРОДЪЛЖИТЕЛНОСТ: 420 минути (7 часа) <br> 🧩 11 модула + тест + беседа</div>
+        <button class="topic-btn active" data-topic="0"><span class="topic-btn-left">1. 🌍 Опасности в интернет</span><span class="topic-time">45 мин</span></button>
+        <button class="topic-btn" data-topic="1"><span class="topic-btn-left">2. 💔 Секстинг + кибертормоз</span><span class="topic-time">50 мин</span></button>
+        <button class="topic-btn" data-topic="2"><span class="topic-btn-left">3. 🎣 Фишинг, спам, измами</span><span class="topic-time">45 мин</span></button>
+        <button class="topic-btn" data-topic="3"><span class="topic-btn-left">4. 🧬 Дигитален отпечатък</span><span class="topic-time">35 мин</span></button>
+        <button class="topic-btn" data-topic="4"><span class="topic-btn-left">5. 🌐 Дигитална култура и обучение 1-12 клас</span><span class="topic-time">70 мин</span></button>
+        <button class="topic-btn" data-topic="5"><span class="topic-btn-left">6. 🆔 Кражба на самоличност</span><span class="topic-time">35 мин</span></button>
+        <button class="topic-btn" data-topic="6"><span class="topic-btn-left">7. 📜 GDPR и лични данни</span><span class="topic-time">35 мин</span></button>
+        <button class="topic-btn" data-topic="7"><span class="topic-btn-left">8. 🛠️ Полезни инструменти</span><span class="topic-time">25 мин</span></button>
+        <button class="topic-btn" data-topic="8"><span class="topic-btn-left">9. 🤖 AI и киберпрестъпления</span><span class="topic-time">30 мин</span></button>
+        <button class="topic-btn" data-topic="9"><span class="topic-btn-left">10. 📝 ТЕСТ (20 въпроса)</span><span class="topic-time">25 мин</span></button>
+        <button class="topic-btn" data-topic="10"><span class="topic-btn-left">11. 💬 ВЪПРОСИ ЗА БЕСЕДА</span><span class="topic-time">25 мин</span></button>
+    </div>
+
+    <div class="main-content">
+        <!-- ТЕМА 1 - Опасности в интернет -->
+        <div class="topic active-topic" id="topic0">
+            <div class="card">
+                <span class="time-badge">⏱️ 45 минути</span>
+                <h1>🌍 Видове опасности и заплахи в интернет за децата</h1>
+                <div class="definition-box">
+                    <strong>📊 МАЩАБ НА ПРОБЛЕМА – АКТУАЛНИ СТАТИСТИКИ (2024-2025):</strong><br>
+                    • 🌍 Според UNICEF, <span class="stat-highlight">1 от 3 деца онлайн</span> е изложено на заплаха – това са над 350 милиона деца в световен мащаб.<br>
+                    • 📈 Над <span class="stat-highlight">60% от децата под 16 години</span> са попадали на неподходящо съдържание (Europol, 2024).<br>
+                    • ⚠️ <span class="stat-highlight">85% от подрастващите</span> са били свидетели на онлайн тормоз; <span class="stat-highlight">43%</span> са били преки жертви (Ditch the Label, 2024).<br>
+                    • 🎮 <span class="stat-highlight">76% от децата</span> между 8-12 години имат профил в социална мрежа, въпреки възрастовите ограничения (Ofcom, 2024).<br>
+                    • 📱 Средната възраст за получаване на първия смартфон в България е <span class="stat-highlight">9.5 години</span> (Национална стратегия за дигитална трансформация).
+                </div>
+                <div class="two-columns">
+                    <div class="col">
+                        <h3>😈 Кибертормоз</h3>
+                        <p>Повтарящ се тормоз чрез дигитални технологии: обидни съобщения, разпространение на лъжи, публикуване на снимки без разрешение, изключване от групи, създаване на омразни страници.</p>
+                        <p><strong>📌 Реален случай (2023 г.):</strong> 14-годишно момиче от София напуска училище след системен тормоз в TikTok – съученици създават фалшив профил и публикуват лични снимки без нейно съгласие. След намеса на Национална линия 116111 е оказана психологическа подкрепа.</p>
+                        <div class="legal-reference">⚖️ Чл. 146 от Наказателния кодекс: "Заплашване" – до 6 години лишаване от свобода.</div>
+                    </div>
+                    <div class="col">
+                        <h3>🕵️ Онлайн хищници (груминг)</h3>
+                        <p>Възрастни, които се представят за връстници в социалните мрежи или игри (най-често във Fortnite, Roblox, Discord, TikTok), с цел емоционална манипулация и сексуална експлоатация.</p>
+                        <p><strong>📊 Факт:</strong> Според FBI, над <span class="stat-highlight">500 000 онлайн хищници</span> са активни в световната мрежа във всеки един момент.</p>
+                        <p><strong>🎮 Най-рискови платформи:</strong> Discord (34% от случаите), Snapchat (28%), TikTok (18%), Instagram (15%), Roblox (5% - но растящ тренд).</p>
+                    </div>
+                </div>
+                <div class="example">
+                    <strong>👥 КАЗУС "Дебнещите" – РЕАЛНА ИСТОРИЯ:</strong> 12-годишна ученичка от Варна получава приятелска заявка от "Мартин, 13 г." (профил с 200 приятели и снимки на момче). След 2 месеца комуникация "Мартин" започва да иска снимки по бельо и личен адрес, като се опитва да я изнудва. Майката забелязва промяна в поведението (дъщерята стои будна до 2 часа, крие телефона) и проверява устройството.
+                    <div class="toggle-answer" onclick="toggleAnswer(this)">📌 Виж пълен протокол за реакция</div>
+                    <div class="answer-hidden">
+                        <div class="solution-box">
+                            <strong>✅ ПРОТОКОЛ ЗА ДЕЙСТВИЕ ПРИ ГРУМИНГ:</strong><br>
+                            1️⃣ <strong>СПРИ КОМУНИКАЦИЯТА</strong> – не отговаряй на изнудвача, това е неговата слабост.<br>
+                            2️⃣ <strong>ДОКУМЕНТИРАЙ</strong> – направи екранни снимки на целия чат, профила, URL адресите.<br>
+                            3️⃣ <strong>БЛОКИРАЙ ПРОФИЛА</strong> – предотвратява по-нататъшен контакт.<br>
+                            4️⃣ <strong>СИГНАЛИЗИРАЙ</strong> – Национална линия за деца <strong>116111</strong> (безплатна, анонимна, денонощна).<br>
+                            5️⃣ <strong>ПСИХОЛОГИЧЕСКА ПОДКРЕПА</strong> – училищен психолог или частен специалист.<br>
+                            6️⃣ <strong>ПОЛИЦИЯ (ГДБОП)</strong> – при тежки случаи на изнудване или опит за среща.<br>
+                            7️⃣ <strong>ДОКЛАД ДО ПЛАТФОРМАТА</strong> – използвай бутона "Report" в социалната мрежа.
+                        </div>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <strong>📋 ПРАКТИЧЕСКИ АЛГОРИТЪМ ЗА ПРЕДПАЗВАНЕ В УЧИЛИЩЕ (6 стъпки):</strong><br>
+                    <strong>Стъпка 1: Осведомяване</strong> – провеждане на уроци по киберсигурност най-малко 2 пъти годишно (задължително за всички класове). Включване на родители чрез информационни бюлетини и родителски срещи.<br>
+                    <strong>Стъпка 2: Правила и кодекси</strong> – създаване на училищен "Кодекс за дигитално поведение" със санкции при нарушения. Учениците подписват декларация за спазване.<br>
+                    <strong>Стъпка 3: Ранно разпознаване</strong> – обучение на учителите да разпознават признаци: изолация, спад на успеха, тревожност, криене на телефона, промяна в настроението.<br>
+                    <strong>Стъпка 4: Техническа защита</strong> – силни пароли (мениджър на пароли), двуфакторно удостоверяване, антивирусни програми, родителски контрол (Google Family Link, Apple Screen Time).<br>
+                    <strong>Стъпка 5: Анонимни сигнали</strong> – въвеждане на "Кутия за доверие" (анонимни съобщения до психолога) и дигитален формуляр за докладване на тормоз.<br>
+                    <strong>Стъпка 6: Следене и оценка</strong> – тримесечни анкети за климата в училище и честотата на онлайн тормоза.
+                    <div class="toggle-answer" onclick="toggleAnswer(this)">📌 Виж детайлно описание на всяка стъпка</div>
+                    <div class="answer-hidden">
+                        <div class="solution-box">
+                            <strong>✅ ДЕТАЙЛНО РАЗПИСАНИЕ:</strong><br>
+                            • <strong>Стъпка 1:</strong> Използвайте Google Interland, ролеви игри, казуси от реалния живот. Провеждайте учения "Какво правиш при нежелано съобщение".<br>
+                            • <strong>Стъпка 2:</strong> Кодексът трябва да включва: забрана за снимане в училище без разрешение; правила за ползване на телефони в час; процедура за докладване на тормоз.<br>
+                            • <strong>Стъпка 3:</strong> Признаци: детето става раздразнително, плаче без причина, не иска да ходи на училище, крие екрана на телефона, има кошмари.<br>
+                            • <strong>Стъпка 4:</strong> Препоръчани мениджъри на пароли: Bitwarden (безплатен), 1Password, KeePass. Включете 2FA за всички акаунти.<br>
+                            • <strong>Стъпка 5:</strong> Анонимният формуляр може да бъде Google Forms, достъпен през QR код в коридора.<br>
+                            • <strong>Стъпка 6:</strong> Анкетата трябва да включва въпроси за чувството за безопасност, честота на нежелани контакти, готовност за търсене на помощ.
+                        </div>
+                    </div>
+                </div>
+                <div class="source-badge">📚 Източници: UNICEF (2024), Europol (2024), Ditch the Label (2024), Ofcom (2024), FBI, ГДБОП</div>
+            </div>
+        </div>
+
+        <!-- ТЕМА 2 - Секстинг + кибертормоз -->
+        <div class="topic" id="topic1">
+            <div class="card">
+                <span class="time-badge">⏱️ 50 минути</span>
+                <h1>📸 Секстинг и кибертормоз — разпознаване, последствия, закон</h1>
+                <div class="definition-box">
+                    <strong>⚠️ СЕКСТИНГ (Sexting):</strong> Размяна на интимни снимки, видеа или съобщения между партньори. 
+                    <strong>📊 Статистики (2024):</strong>
+                    • <span class="stat-highlight">1 на 5 тийнейджъри</span> (20%) са изпращали сексуално съдържание – увеличение с 40% спрямо 2020 г.<br>
+                    • <span class="stat-highlight">14% от момичетата</span> са били принуждавани да изпратят интимна снимка след заплахи.<br>
+                    • Разпространението на голи снимки на лица под 18 години се счита за <strong>детска порнография</strong> – Наказателният кодекс предвижда <span class="stat-highlight">от 2 до 8 години лишаване от свобода (чл. 159А)</span>.
+                </div>
+                <div class="definition-box">
+                    <strong>💢 КИБЕРТОРМОЗ (Cyberbullying):</strong> Повтарящ се тормоз чрез дигитални технологии. За разлика от физическия тормоз, кибертормозът може да продължи <strong>24/7</strong> и да достигне до много по-широка аудитория.
+                    <strong>📊 Статистики:</strong>
+                    • 43% от учениците са преживявали онлайн тормоз.<br>
+                    • 70% от жертвите не споделят с възрастен поради страх или срам.<br>
+                    • <span class="stat-highlight">87% от тийнейджърите</span> са свидетели на кибертормоз, но само <span class="stat-highlight">20%</span> се намесват (StopBullying.gov).
+                </div>
+                <div class="two-columns">
+                    <div class="col">
+                        <h3>😔 Психологически и социални последици:</h3>
+                        <ul>
+                            <li>Унижение, загуба на самочувствие и чувство за собствена стойност</li>
+                            <li>Депресия – <span class="stat-highlight">4 пъти по-висок риск</span> при жертви на кибертормоз</li>
+                            <li>Тревожни разстройства и панически атаки</li>
+                            <li>Социална изолация – детето спира да излиза с приятели</li>
+                            <li>Спад в училищното представяне (средно с 0.5 до 1 оценка)</li>
+                            <li>Безсъние, стомашни болки, главоболие – психосоматични симптоми</li>
+                            <li><strong>Риск от самонараняване и суицидни мисли</strong> – <span class="stat-highlight">2.5 пъти по-висок</span> при редовните жертви</li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <h3>🛡️ 7-стъпков протокол за реакция при кибертормоз:</h3>
+                        <ol>
+                            <li><strong>НЕ ОТГОВАРЯЙ</strong> на агресора – това е неговата цел.</li>
+                            <li><strong>ДОКУМЕНТИРАЙ</strong> – екранни снимки, URL адреси, дати.</li>
+                            <li><strong>БЛОКИРАЙ</strong> профила на нарушителя във всички платформи.</li>
+                            <li><strong>СИГНАЛИЗИРАЙ</strong> на платформата (бутон "Report" / "Докладвай").</li>
+                            <li><strong>ПОТЪРСИ ПОДКРЕПА</strong> – родител, учител, училищен психолог.</li>
+                            <li><strong>НАЦИОНАЛНА ЛИНИЯ 116111</strong> – безплатна, анонимна, денонощна.</li>
+                            <li><strong>ПРИ ЗАПЛАХИ ЗА ЖИВОТА</strong> – незабавно уведомяване на полицията (112, ГДБОП).</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="example">
+                    <strong>💔 РЕАЛЕН КАЗУС "Изоставеното гадже" (България, 2023 г.):</strong> 15-годишни от Пловдив си изпращат интимни снимки в рамките на връзка (8 месеца). След раздяла момчето разпространява снимките в 3 училищни WhatsApp групи. Момичето получава подигравки от над 50 съученици, пропуска училище 2 седмици, майката забелязва промяна след като детето се самозасрамва и отказва да излиза от стаята си.
+                    <div class="toggle-answer" onclick="toggleAnswer(this)">📌 Виж правни последствия и ход на действие</div>
+                    <div class="answer-hidden">
+                        <div class="solution-box">
+                            <strong>✅ ПРАВНИ ПОСЛЕДСТВИЯ И ДЕЙСТВИЯ:</strong><br>
+                            • <strong>Наказание:</strong> Разпространението на интимни снимки на непълнолетни е престъпление по <strong>чл. 159А от Наказателния кодекс</strong> – лишаване от свобода от 2 до 8 години.<br>
+                            • <strong>Осъдителна практика:</strong> През 2023 г. в България има <span class="stat-highlight">14 осъдителни присъди</span> за разпространение на интимни материали на непълнолетни.<br>
+                            <strong>📋 ПРОТОКОЛ ЗА ДЕЙСТВИЕ В УЧИЛИЩЕ:</strong><br>
+                            1) Запазване на всички снимки, чатове и екранни кадри като доказателства.<br>
+                            2) Уведомяване на директора на училището и родителите на всички участници.<br>
+                            3) Провеждане на индивидуални разговори с всички замесени ученици.<br>
+                            4) Осигуряване на психологическа подкрепа за жертвата (училищен психолог + външен специалист).<br>
+                            5) Сигнал до отдел "Киберпрестъпност" на ГДБОП на място.<br>
+                            6) Училището уведомява Детска педагогическа стая за извършеното деяние.<br>
+                            7) Организиране на час на класа за превенция на секстинг сред съучениците.
+                        </div>
+                    </div>
+                </div>
+                <div class="quote">
+                    <strong>📢 ВАЖНО ЗА УЧИТЕЛИ И РОДИТЕЛИ:</strong> Никога не обвинявайте жертвата! Отговорността е изцяло за този, който разпространява материалите без съгласие. Ключови думи: "Ти заслужаваш подкрепа", "Това не е твоя вина", "Ние ще помогнем".
+                </div>
+                <div class="legal-reference">
+                    ⚖️ <strong>СПРАВКА ПО НАКАЗАТЕЛНИЯ КОДЕКС:</strong><br>
+                    • Чл. 159А – „Който създава, съхранява, разпространява или придобива порнографски материал с лице, което не е навършило 18 години, се наказва с лишаване от свобода от 2 до 8 години и с глоба от 5 000 до 15 000 лв.“<br>
+                    • Чл. 159Б – При повторно или организирано деяние – от 5 до 15 години лишаване от свобода.<br>
+                    • Чл. 146 – Заплашване с тежко престъпление – до 6 години лишаване от свобода.
+                </div>
+                <div class="source-badge">📁 Източници: НК България, ГДБОП, StopBullying.gov, UNICEF Bulgaria (2024)</div>
+            </div>
+        </div>
+
+        <!-- ТЕМА 3 - Фишинг, спам, измами -->
+        <div class="topic" id="topic2">
+            <div class="card">
+                <span class="time-badge">⏱️ 45 минути</span>
+                <h1>🎣 Фишинг, фалшиви писма, спам — пълно професионално ръководство</h1>
+                <div class="definition-box">
+                    <strong>🎭 ФИШИНГ (Phishing):</strong> Измама чрез фалшиви имейли, SMS (смишинг), фалшиви сайтове или телефонни обаждания (вишинг), чиято цел е да откраднат пароли, банкови данни, номера на кредитни карти и друга лична информация.
+                    <strong>📊 МАЩАБ (2024):</strong>
+                    • <span class="stat-highlight">75% от кибератаките</span> започват с фишинг имейл (Verizon DBIR).<br>
+                    • <span class="stat-highlight">323 млн. души</span> са били жертва на фишинг през 2023 г. (Global Anti-Phishing Survey).<br>
+                    • В България <span class="stat-highlight">18 500 сигнала</span> за фишинг са подадени до ГДБОП през 2024 г. – ръст от 45% спрямо предходната година.<br>
+                    • Средната финансова загуба от успешен фишинг в България е <span class="stat-highlight">2 800 лв.</span> на жертва.
+                </div>
+                <div class="example">
+                    <strong>📧 РЕАЛЕН ФИШИНГ ИМЕЙЛ (клонинг на популярен сайт):</strong>
+                    <div style="background:#0a2a38; padding:1rem; border-radius:0.8rem; margin:0.5rem 0; font-family:monospace; font-size:0.8rem;">
+                        📨 От: "Facebook Security" &lt;security@faceb00k-login.tk&gt;<br>
+                        📎 Тема: ⚠️ ВАЖНО: Вашият акаунт ще бъде спрян след 24 часа!<br>
+                        📄 Съдържание: Забелязахме необичайна активност. Моля, потвърдете самоличността си, като кликнете тук: http://faceb00k-login.xyz/verify<br>
+                        ❗ Ако не го направите, акаунтът ви ще бъде изтрит завинаги.
+                    </div>
+                    <strong>🔍 Анализ на червените флагове:</strong> Изпращачът не е от @facebook.com, а от @faceb00k-login.tk; домейнът .tk е безплатен често използван за измами; заплашителен тон („ще бъде спрян“); правописна грешка в линка (faceb00k вместо facebook); линкът не сочи към официалния сайт.
+                    <div class="toggle-answer" onclick="toggleAnswer(this)">📌 Как да реагираме при фишинг опит?</div>
+                    <div class="answer-hidden">
+                        <div class="solution-box">
+                            <strong>✅ ПРОТОКОЛ ЗА ДЕЙСТВИЕ ПРИ ПОЛУЧЕН ФИШИНГ:</strong><br>
+                            1️⃣ <strong>НЕ КЛИКАЙ!</strong> – Никога не отваряй линкове и не сваляй прикачени файлове.<br>
+                            2️⃣ <strong>ПРОВЕРИ ИЗПРАЩАЧА</strong> – задръж курсора върху името или отвори детайлите на имейла.<br>
+                            3️⃣ <strong>ПРОВЕРИ ЛИНКА</strong> (без да кликаш) – задръж курсора – истинският линк ще се покаже долу вляво.<br>
+                            4️⃣ <strong>ИЗТРИЙ ИМЕЙЛА</strong> – не го препращай, не отговаряй.<br>
+                            5️⃣ <strong>АКО СТЕ ВЪВЕЛИ ДАННИ</strong> – незабавно сменете паролата на истинския сайт и включете 2FA.<br>
+                            6️⃣ <strong>СИГНАЛИЗИРАЙ</strong> – докладвай на ИТ отдела, на платформата (бутон "Report phishing") или на <strong>https://www.cybercrime.bg</strong>.<br>
+                            7️⃣ <strong>ПРЕДУПРЕДИ КОЛЕГИТЕ</strong> – за да не станат жертва.
+                        </div>
+                    </div>
+                </div>
+                <div class="two-columns">
+                    <div class="col">
+                        <h3>🚩 12-ТЕ ЧЕРВЕНИ ФЛАГА ЗА ФИШИНГ:</h3>
+                        <ol style="list-style-type: decimal; margin-left: 1rem;">
+                            <li>Непознат или странен имейл адрес на изпращача</li>
+                            <li>Правописни и граматически грешки</li>
+                            <li>Спешност и заплашителен тон ("акаунтът ще бъде изтрит")</li>
+                            <li>Странни линкове (.tk, .xyz, .cf, .ml, .top, .club)</li>
+                            <li>Искане на лични данни или парола (никога не се иска по имейл!)</li>
+                            <li>Неочаквани прикачени файлове (.exe, .zip, .scr, .js)</li>
+                            <li>Фалшив логотип с ниско качество</li>
+                            <li>Обръщение "Уважаеми клиенте" вместо име</li>
+                            <li>Кликбейт теми („Спечелихте iPhone“, „Пратката ви е задържана“)</li>
+                            <li>Нестандартен език (прекалено официален или неформален)</li>
+                            <li>Несъответствие между името на изпращача и имейл адреса</li>
+                            <li>Линкът не започва с https:// и няма катинарче</li>
+                        </ol>
+                    </div>
+                    <div class="col">
+                        <h3>✅ ПРАКТИЧЕСКА ЗАЩИТА (5 нива):</h3>
+                        <ul>
+                            <li><strong>Ниво 1 (Базово):</strong> Никога не кликай на линкове в подозрителни имейли – въведи адреса ръчно в браузъра.</li>
+                            <li><strong>Ниво 2 (Техническо):</strong> Използвай двуфакторно удостоверяване (2FA) за всички важни акаунти.</li>
+                            <li><strong>Ниво 3 (Софтуерно):</strong> Инсталирай филтри за спам и антифишинг разширения (uBlock Origin, Malwarebytes).</li>
+                            <li><strong>Ниво 4 (Обучение):</strong> Провеждай ролева игра "Разпознай фишинг имейла" с учениците (минимум 2 пъти годишно).</li>
+                            <li><strong>Ниво 5 (Организационно):</strong> Въведи протокол за докладване на фишинг в училище (отговорник – ИТ специалист).</li>
+                        </ul>
+                        <div class="example" style="margin-top: 0.8rem;">
+                            <strong>📊 Факт:</strong> След обучение по разпознаване на фишинг, процентът на успешни атаки спада от 32% до 8% (Stanford University Research).
+                        </div>
+                    </div>
+                </div>
+                <div class="source-badge">📁 Източници: Verizon DBIR 2024, APWG Global Phishing Survey, ГДБОП, Stanford University Research</div>
+            </div>
+        </div>
+
+        <!-- ТЕМА 4 - Дигитален отпечатък -->
+        <div class="topic" id="topic3">
+            <div class="card">
+                <span class="time-badge">⏱️ 35 минути</span>
+                <h1>🧬 Дигитален отпечатък – следите, които остават завинаги</h1>
+                <div class="definition-box">
+                    <strong>📌 ДИГИТАЛЕН ОТПЕЧАТЪК (Digital Footprint):</strong> Съвкупността от всички данни, които оставяме, докато използваме интернет. Това включва публикации, коментари, снимки, видеа, история на търсенията, харесвания, местоположения, IP адреси, бисквитки и дори времето, прекарано на определени сайтове. Дигиталният отпечатък започва да се формира от момента, в който детето за първи път използва устройство с интернет (средно на 5-6 години).
+                </div>
+                <div class="two-columns">
+                    <div class="col">
+                        <h3>😶 ПАСИВЕН ДИГИТАЛЕН ОТПЕЧАТЪК</h3>
+                        <p>Данни, които оставяме <strong>без да осъзнаваме</strong> или без активно действие:</p>
+                        <ul>
+                            <li><strong>IP адрес</strong> – уникален идентификатор на вашето устройство в мрежата</li>
+                            <li><strong>Бисквитки (cookies)</strong> – проследяващи кодове</li>
+                            <li><strong>История на търсенията</strong> – Google, YouTube, Bing</li>
+                            <li><strong>Местоположение</strong> (GPS, Wi-Fi триангулация)</li>
+                            <li><strong>Тип устройство и браузър</strong> (User-Agent)</li>
+                            <li><strong>Време на посещение и прекарано време</strong> на сайт</li>
+                            <li><strong>Екранна резолюция и операционна система</strong></li>
+                        </ul>
+                        <p><strong>📊 Факт:</strong> Само за един ден един човек генерира средно <span class="stat-highlight">700 MB</span> пасивни дигитални данни.</p>
+                    </div>
+                    <div class="col">
+                        <h3>😃 АКТИВЕН ДИГИТАЛЕН ОТПЕЧАТЪК</h3>
+                        <p>Данни, които <strong>съзнателно публикуваме</strong>:</p>
+                        <ul>
+                            <li><strong>Снимки и видеа</strong> в социални мрежи (Instagram, TikTok, Facebook, Snapchat)</li>
+                            <li><strong>Коментари във форуми</strong> (Reddit, Twitter/X, YouTube)</li>
+                            <li><strong>Публикации в блогове или уебсайтове</strong></li>
+                            <li><strong>Отзиви за продукти</strong> (в Amazon, Google Maps, eBay)</li>
+                            <li><strong>Споделяния (retweets, shares, reposts)</strong></li>
+                            <li><strong>Харесвания (лайкове) и реакции (емоджита)</strong></li>
+                            <li><strong>Регистрации в уебсайтове и форуми</strong></li>
+                        </ul>
+                        <p><strong>📊 Факт:</strong> 84% от младите хора (15-25 г.) съжаляват за публикация, която са направили онлайн, най-често след 1-2 години.</p>
+                    </div>
+                </div>
+                <div class="quote">
+                    <strong>👥 НЕВИДИМА АУДИТОРИЯ – КОЙ ВИЖДА ВАШИЯ ДИГИТАЛЕН ОТПЕЧАТЪК?</strong><br>
+                    • <strong>Бъдещи работодатели</strong> – 70% от HR специалистите проверяват социалните мрежи на кандидатите преди интервю (CareerBuilder).<br>
+                    • <strong>Приемателни комисии в университети</strong> – 35% признават, че са отхвърлили кандидат въз основа на онлайн активност.<br>
+                    • <strong>Застрахователи</strong> – проверяват за рисково поведение при изчисляване на премиите.<br>
+                    • <strong>Банки и кредитни институции</strong> – проучват дигиталния отпечатък преди отпускане на заем.<br>
+                    • <strong>Полиция и разследващи органи</strong> – използват публични постове като доказателства в дела.<br>
+                    • <strong>Медии и журналисти</strong> – търсят компрометираща информация за публични личности.<br>
+                    • <strong>Маркетингови компании</strong> – съставят психологически профили за таргетиране на реклами.
+                </div>
+                <div class="example">
+                    <strong>🧪 ПРАКТИЧЕСКО УПРАЖНЕНИЕ ЗА УЧЕНИЦИ "Потърси се в Google":</strong><br>
+                    🔍 Напишете пълното си име (име + фамилия) в Google и разгледайте резултатите. След това добавете името на вашето училище или град. Какво се показва? Има ли снимки, които не помните, че сте качвали? Има ли информация, която бихте искали да премахнете?
+                    <div class="toggle-answer" onclick="toggleAnswer(this)">📌 10 препоръки за почистване на дигиталния отпечатък</div>
+                    <div class="answer-hidden">
+                        <div class="solution-box">
+                            <strong>✅ ПРЕПОРЪКИ ЗА УПРАВЛЕНИЕ НА ДИГИТАЛНИЯ ОТПЕЧАТЪК:</strong><br>
+                            <ol>
+                                <li><strong>Направи одит</strong> – търси името си в Google поне веднъж на 6 месеца.</li>
+                                <li><strong>Изтрий старото</strong> – премахни снимки, коментари или публикации, които вече не те представят добре.</li>
+                                <li><strong>Премахни тагове</strong> – махни маркери от публикации на други хора, които не одобряваш.</li>
+                                <li><strong>Деактивирай/изтрий</strong> – всички профили в социални мрежи, които не използваш активно.</li>
+                                <li><strong>Настрой поверителност</strong> – минимум "само приятели" във Facebook, Instagram, TikTok.</li>
+                                <li><strong>Прегледай приложенията</strong> – премахни достъпа на стари приложения до профилите ти.</li>
+                                <li><strong>Използвай "Правото да бъдеш забравен"</strong> (GDPR) – поискай премахване на информация от търсачките.</li>
+                                <li><strong>Помисли преди публикация</strong> – ще искаш ли този пост да се вижда след 5 години?</li>
+                                <li><strong>Разделни профили</strong> – създай професионален профил (LinkedIn) и личен (приватно).</li>
+                                <li><strong>Обучение</strong> – научи децата си от малки за концепцията за дигиталния отпечатък.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <div class="quote">
+                    <strong>💡 ЗЛАТНО ПРАВИЛО:</strong> "Никога не публикувай нищо онлайн, което не би показал на учителите, родителите или бъдещия си шеф."
+                </div>
+                <div class="source-badge">📁 Източници: CareerBuilder, GDPR, Google Transparency Report, Pew Research Center</div>
+            </div>
+        </div>
+
+        <!-- ТЕМА 5 - Дигитална култура + обучение 1-12 клас -->
+        <div class="topic" id="topic4">
+            <div class="card">
+                <span class="time-badge">⏱️ 70 минути</span>
+                <h1>🌐 Дигитална култура + пълно обучение 1-12 клас</h1>
+                <div class="definition-box">
+                    <strong>📚 ДИГИТАЛНА КУЛТУРА (Digital Literacy & Citizenship):</strong> Съвкупността от знания, умения, етични норми и отговорност при използване на дигиталните технологии. Според UNESCO, дигиталната грамотност е четвъртата основна грамотност (след четене, писане и смятане). Включва способността за критично мислене, защита на лични данни, уважение към другите онлайн, разпознаване на манипулации и дезинформация, както и безопасно и ефективно използване на интернет.
+                </div>
+                <div class="example">
+                    <strong>📋 10-ТЕ ЗЛАТНИ ПРАВИЛА ЗА ИНТЕРНЕТ БЕЗОПАСНОСТ (за ученици, учители и родители):</strong>
+                    <ol style="margin-top: 0.5rem;">
+                        <li><strong>Използвай силни и уникални пароли</strong> – минимум 12 знака, комбинация от букви, цифри, специални символи. Различна парола за всеки акаунт.</li>
+                        <li><strong>Никога не споделяй лична информация онлайн</strong> – адрес, телефон, ЕГН, училище, местоположение в реално време.</li>
+                        <li><strong>Внимавай с линкове и прикачени файлове</strong> – от непознати изпращачи – не кликай, не сваляй.</li>
+                        <li><strong>Не споделяй паролите си с никого</strong> – дори с най-добрите приятели или "гаджета".</li>
+                        <li><strong>Заключвай устройствата си</strong> – телефон, таблет, компютър – с ПИН код или биометрия.</li>
+                        <li><strong>Мисли преди да публикуваш</strong> – снимките, видеата и коментарите остават ЗАВИНАГИ онлайн.</li>
+                        <li><strong>Докладвай обиди, тормоз и странни съобщения</strong> – на възрастен или чрез бутона "Report".</li>
+                        <li><strong>Проверявай източниците</strong> – не вярвай на всичко, което виждаш. Сравнявай с поне 2-3 други източника.</li>
+                        <li><strong>Не се срещай с онлайн познати без разрешение</strong> – и винаги с възрастен.</li>
+                        <li><strong>Говори с възрастен при притеснения</strong> – родител, учител, психолог, Национална линия 116111.</li>
+                    </ol>
+                </div>
+                <div class="lesson-plan">
+                    <h4>👶 1.–4. КЛАС – "Кибергерои" (25 минути)</h4>
+                    <p><strong>📖 Приказка "Кибергероите и тъмният линк":</strong> Лили, Ники и Бобо получават съобщение от "Zlomi123" с линк към нова игра. Лили клика и компютърът ѝ започва да се държи странно. Тримата се съветват и казват на родителите си.</p>
+                    <p><strong>🎵 Песен (на мелодия "Зайченцето бяло"):</strong><br>
+                    "Щом е странно, не го щракай – плесни с ръце! 👏<br>
+                    Ако някой те заплашва – сподели веднъж-две-три! 🙋<br>
+                    Кибергерой бъди, смело кажи –<br>
+                    „Това не е добро, помогни ми ти!“ 👩‍🏫"</p>
+                    <p><strong>🎮 Игра "Добро или лошо онлайн?":</strong> Учителят чете ситуации, децата вдигат зелено 👍 за добро, червено 👎 за лошо.<br>
+                    <strong>Добро:</strong> "Анна казва хубави думи в чата", "Петя пита родител преди да се регистрира", "Калин блокира подозрителен потребител".<br>
+                    <strong>Лошо:</strong> "Митко се подиграва със снимка на съученик", "Непознат пита за адрес", "Дани качва снимки на другите без разрешение".</p>
+                    <p><strong>🎨 Творческа задача:</strong> Рисуване на "Значка на Кибергерой" със свое име (напр. "Капитан Парола", "Мис Пази Се") и едно правило за безопасност.</p>
+                </div>
+                <div class="lesson-plan">
+                    <h4>👦 5.–7. КЛАС – "Разпознай измамата" (25 минути)</h4>
+                    <p><strong>🎭 Ролева игра с фалшив имейл:</strong> "Получавате имейл от YouTube Support: 'Акаунтът ти е маркиран за нарушение! За да избегнеш изтриване, влез в профила си ТУК: youtube-support-verify.tk'"</p>
+                    <p><strong>👥 Разделяне на 3 групи:</strong><br>
+                    <strong>Група 1 "Разследващи":</strong> Проверяват автентичността – адрес, линк, правопис, тона.<br>
+                    <strong>Група 2 "Екип за защита":</strong> Решават как да реагират безопасно.<br>
+                    <strong>Група 3 "Родители/учители":</strong> Обсъждат как да подкрепят дете в подобна ситуация.</p>
+                    <p><strong>✅ ОТГОВОРИ:</strong> "Разследващи" – имейлът е фалшив (адресът @youtube-support.tk, линкът .tk, правописни грешки, заплашителен тон). "Екип за защита" – да не кликаме, да изтрием, да уведомим родител/учител. "Родители" – да обяснят целта на фишинг атаките, да проверят настройките за сигурност.</p>
+                </div>
+                <div class="lesson-plan">
+                    <h4>👨‍🎓 8.–12. КЛАС – 4 задълбочени теми (40 минути)</h4>
+                    <p><strong>📰 ТЕМА 1: Фалшиви новини и дезинформация</strong><br>Алгоритмите на социалните мрежи показват съдържание, което предизвиква силни емоции (гняв, страх, радост), защото това увеличава времето, прекарано в платформата. Упражнение: Изберете новина от седмицата и проверете чрез Google Fact Check, Snopes.com или проверка на източника. Защо хората вярват на конспирации? (когнитивни изкривявания, ехо камери, алгоритми).</p>
+                    <p><strong>📸 ТЕМА 2: Секстинг и правни последици</strong><br>Запознаване с чл. 159А от НК (2-8 години затвор), понятието за информирано съгласие (съгласието трябва да е свободно, специфично, информирано и недвусмислено). Разпространение на интимни снимки на непълнолетни = детска порнография, независимо дали всички са доброволци. Ролева игра: "Какво правиш, ако ти изпратят интимна снимка на съученик?"</p>
+                    <p><strong>🤖 ТЕМА 3: Deepfake и изкуствена манипулация</strong><br>Как се създават фалшиви видеа и аудио с изкуствен интелект (GAN – генеративно-състезателни мрежи). Как да разпознаваме deepfake: неестествено мигане, несъответствия в осветлението, странно движение на устните, замъглени ръбове, артефакти около лицето. Използвайте Detect Deepfake от MIT за практически упражнения.</p>
+                    <p><strong>📱 ТЕМА 4: Манипулация в социалните мрежи</strong><br>Инфлуенсъри и скрита реклама – защо трябва да се обозначава с #ad или #реклама (по закон в ЕС). "Стаден ефект" (bandwagon effect) – хората са склонни да вярват на нещо, ако виждат, че много други го споделят. Фалшив консенсус – алгоритмите показват само гледната точка, която харесваме. Упражнение: Разпознайте скритата реклама в 3 Instagram поста.</p>
+                </div>
+                <div class="source-badge">📁 Пълен комплект уроци за дигитална грамотност от 1 до 12 клас. Източници: UNESCO, Google Be Internet Awesome, Common Sense Education</div>
+            </div>
+        </div>
+
+        <!-- ТЕМА 6 Кражба на самоличност -->
+        <div class="topic" id="topic5">
+            <div class="card"><span class="time-badge">⏱️ 35 минути</span><h1>🆔 Кражба на самоличност – предотвратяване и действия</h1>
+            <div class="definition-box">
+                <strong>🔐 КРАЖБА НА САМОЛИЧНОСТ (Identity Theft):</strong> Престъпление, при което нападател използва лична информация на друго лице за финансови измами, сключване на договори, теглене на кредити или други незаконни дейности.<br>
+                <strong>📊 МАЩАБ (2024 г.):</strong>
+                • В световен мащаб: <span class="stat-highlight">1 на 15 души</span> е бил жертва на кражба на самоличност.<br>
+                • В България: <span class="stat-highlight">ръст от 40%</span> на подобни случаи за 2022-2024 г.<br>
+                • Средна финансова загуба на жертва в България: <span class="stat-highlight">3 500 лв.</span><br>
+                • Най-често откраднати данни: ЕГН (78%), име и адрес (65%), номер на кредитна карта (42%), телефон (38%).
+            </div>
+            <div class="two-columns"><div class="col">
+                <h3>📋 ВИДОВЕ КРАЖБА НА САМОЛИЧНОСТ:</h3>
+                <ul>
+                    <li><strong>Финансова</strong> – теглене на кредити, откриване на банкови сметки</li>
+                    <li><strong>Кражба на акаунти</strong> – социални мрежи, имейл, онлайн платформи</li>
+                    <li><strong>Данъчна измама</strong> – подаване на фалшиви данъчни декларации</li>
+                    <li><strong>Медицинска</strong> – използване на чужда здравна осигуровка за лечение</li>
+                    <li><strong>Престъпна</strong> – представяне пред полицията с чужди данни</li>
+                    <li><strong>Детска</strong> – най-опасна, защото може да остане незабелязана с години</li>
+                    <li><strong>Синтетична</strong> – комбиниране на реални и фалшиви данни за нов профил</li>
+                </ul>
+            </div><div class="col">
+                <h3>⚠️ ПОСЛЕДИЦИ ЗА ЖЕРТВАТА:</h3>
+                <ul>
+                    <li>Финансови загуби – средно <span class="stat-highlight">до десетки хиляди лева</span></li>
+                    <li>Увредена кредитна история – невъзможност за теглене на кредит до години</li>
+                    <li>Правни проблеми – договори и задължения от ваше име</li>
+                    <li>Психически стрес, загуба на доверие, депресия</li>
+                    <li>Отнема средно <span class="stat-highlight">200 часа</span> за възстановяване на самоличността</li>
+                </ul>
+            </div></div>
+            <div class="example">
+                <strong>🛡️ ПРЕВЕНТИВНИ МЕРКИ (7 основни):</strong>
+                <ol>
+                    <li>Използвай <strong>силни и уникални пароли</strong> за всеки акаунт + 2FA</li>
+                    <li>Никога не споделяй <strong>снимки на лична карта, ЕГН или паспорт</strong> онлайн</li>
+                    <li>Пазете документите си на <strong>сигурно място</strong> (лични документи не се оставят на бюрото в училище)</li>
+                    <li>Използвай само <strong>защитени сайтове с HTTPS</strong> (катинарче в адресната лента)</li>
+                    <li>Редовно проверявай <strong>банковите си извлечения</strong> за нередности</li>
+                    <li><strong>Скрий личните данни</strong> в пощенската кореспонденция (листовки, фактури) преди изхвърляне</li>
+                    <li>Използвай <strong>кредитен мониторинг</strong> (където е достъпно)</li>
+                </ol>
+                <div class="toggle-answer" onclick="toggleAnswer(this)">📌 Казус "Открадната самоличност на ученик"</div>
+                <div class="answer-hidden">
+                    <div class="solution-box">
+                        <strong>✅ РЕАЛЕН КАЗУС (България, 2023 г.):</strong> 16-годишен ученик от Бургас споделя снимка на личната си карта в Discord с "приятел", за да получи бонуси в онлайн игра. Седмица по-късно открива, че от негово име е теглен потребителски кредит от 4 500 лв.<br>
+                        <strong>📋 ПРОТОКОЛ ЗА ДЕЙСТВИЕ ПРИ КРАЖБА:</strong><br>
+                        1️⃣ Уведомете <strong>банката</strong> незабавно и поискайте спиране на всички карти.<br>
+                        2️⃣ Подайте сигнал до <strong>КЗЛД</strong> (Комисия за защита на личните данни) – cpdp.bg.<br>
+                        3️⃣ Подайте <strong>жалба в полицията</strong> (отдел "Киберпрестъпност" на ГДБОП).<br>
+                        4️⃣ Сменете <strong>всички пароли</strong> на важните си акаунти.<br>
+                        5️⃣ Поискайте <strong>кредитен отчет</strong> от БНБ, за да проверите за нередности.<br>
+                        6️⃣ Уведомете <strong>всички институции</strong>, с които работите (НЗОК, НАП, мобилен оператор).<br>
+                        7️⃣ Подайте сигнал до <strong>трите кредитни бюра</strong> в България (Experian, Creditreform, Borica).
+                    </div>
+                </div>
+            </div>
+            <div class="legal-reference">
+                ⚖️ <strong>НАКАЗАТЕЛНА ОТГОВОРНОСТ ЗА КРАЖБА НА САМОЛИЧНОСТ В БЪЛГАРИЯ:</strong><br>
+                • Чл. 251 от НК – "Документна измама" – лишаване от свобода до 5 години.<br>
+                • Чл. 212а – "Незаконно използване на платежен инструмент" – до 5 години.<br>
+                • Чл. 319 – "Несанкциониран достъп до компютърна система" – до 3 години.
+            </div>
+            <div class="source-badge">📁 Източници: ГДБОП, КЗЛД, БНБ, Experian Bulgaria, Javelin Strategy & Research (2024)</div>
+        </div></div>
+
+        <!-- ТЕМА 7 GDPR и защита на данните -->
+        <div class="topic" id="topic6">
+            <div class="card"><span class="time-badge">⏱️ 35 минути</span><h1>📜 GDPR и защита на личните данни в училище</h1>
+            <div class="definition-box">
+                <strong>🇪🇺 GDPR (Общ регламент относно защитата на данните / General Data Protection Regulation)</strong> – Европейски регламент (ЕС 2016/679), в сила от 25 май 2018 г. Защитава личните данни на гражданите на ЕС, независимо къде се намира организацията, която ги обработва.<br><br>
+                <strong>📌 ЛИЧНИ ДАННИ са:</strong> име, ЕГН, адрес, телефон, имейл, снимки, оценки, поведение, IP адреси, местоположение, биометрични данни (отпечатъци, лице), генетични данни, данни за здраве и др.
+            </div>
+            <div class="two-columns"><div class="col">
+                <h3>⚖️ 8-ТЕ ОСНОВНИ ПРАВА ПО GDPR:</h3>
+                <ol>
+                    <li><strong>Право на информация</strong> – как и защо се обработват данните ви</li>
+                    <li><strong>Право на достъп</strong> – да получите копие на вашите данни</li>
+                    <li><strong>Право на коригиране</strong> – на неточни или непълни данни</li>
+                    <li><strong>Право на изтриване ("да бъдеш забравен")</strong> – при определени условия</li>
+                    <li><strong>Право на ограничаване на обработването</strong> – временно или постоянно</li>
+                    <li><strong>Право на преносимост</strong> – да прехвърлите данните си на друг доставчик</li>
+                    <li><strong>Право на възражение</strong> – срещу обработване за директен маркетинг</li>
+                    <li><strong>Право да не бъдете обект на автоматизирано решение</strong> (профилиране)</li>
+                </ol>
+            </div><div class="col">
+                <h3>🏫 СПЕЦИФИЧНИ ПРАВИЛА В УЧИЛИЩНА СРЕДА:</h3>
+                <ul>
+                    <li><strong>За публикуване на снимки на ученици</strong> в уебсайт, социални мрежи или бюлетини е задължително <strong>писмено информирано съгласие</strong> от родителите.</li>
+                    <li>Всеки учител, който обработва лични данни (оценки, досиета, лични карти), носи <strong>отговорност</strong> за тяхната защита.</li>
+                    <li>Училището трябва да има <strong>Длъжностно лице по защита на данните</strong> (ДЛЗД) – контактът му трябва да е публичен.</li>
+                    <li><strong>Контролен орган в България:</strong> Комисия за защита на личните данни (КЗЛД) – <strong>cpdp.bg</strong>.</li>
+                    <li>Учениците (достатъчно големи) трябва да бъдат информирани за правата си по GDPR по <strong>достъпен за възрастта начин</strong>.</li>
+                    <li>Училището трябва да води <strong>Регистър на дейностите по обработване</strong> на лични данни.</li>
+                    <li>При <strong>нарушение на лични данни</strong> (изтичане, хакване), училището е длъжно да уведоми КЗЛД в <strong>рамките на 72 часа</strong>.</li>
+                </ul>
+                </div></div>
+            <div class="example">
+                <strong>🏫 КАЗУС "Снимки в училищния сайт" (реална проверка на КЗЛД):</strong> Училищен сайт публикува снимки от Коледно тържество с галерия от 45 снимки. Под всяка снимка са изписани трите имена и класовете на учениците. Родители не са давали писмено съгласие.<br>
+                <div class="toggle-answer" onclick="toggleAnswer(this)">📌 Виж нарушението, решението и санкциите</div>
+                <div class="answer-hidden">
+                    <div class="solution-box">
+                        <strong>✅ НАРУШЕНИЕ:</strong><br>
+                        • Чл. 6 от GDPR – обработването не е законосъобразно (липса на съгласие).<br>
+                        • Чл. 12, 13, 14 – липса на прозрачност (неинформиране на родителите).<br>
+                        <strong>📋 РЕШЕНИЕ:</strong><br>
+                        1) Училището трябва <strong>незабавно да премахне всички снимки</strong> от сайта.<br>
+                        2) Да подготви <strong>формуляри за информирано съгласие</strong> за в бъдеще.<br>
+                        3) Да обучи персонала относно правилата за публикуване на снимки.<br>
+                        4) Да назначи ДЛЗД (ако няма такъв).<br>
+                        <strong>💰 ПОТЕНЦИАЛНИ САНКЦИИ:</strong><br>
+                        • До <span class="stat-highlight">20 милиона евро</span> или <span class="stat-highlight">4% от годишния оборот</span> на училището.<br>
+                        • В България КЗЛД налага средни глоби от <span class="stat-highlight">5 000 до 50 000 лв.</span> за подобни нарушения.<br>
+                        <strong>📌 ПРИМЕР ОТ ПРАКТИКАТА:</strong> През 2023 г. КЗЛД наложи глоба от 25 000 лв. на училище в Пловдив за публикуване на снимки на ученици без съгласие.
+                    </div>
+                </div>
+            </div>
+            <div class="quote">
+                <strong>💡 ЗЛАТНО ПРАВИЛО ЗА УЧИЛИЩНИ СНИМКИ:</strong> "Ако не бихте публикували снимката на собственото си дете, не публикувайте и снимка на чуждо. Винаги искайте писмено съгласие!"
+            </div>
+            <div class="source-badge">📁 Източници: GDPR (EU 2016/679), КЗЛД (cpdp.bg), Европейски съвет по защита на данните (EDPB)</div>
+        </div></div>
+
+        <!-- ТЕМА 8 Полезни инструменти -->
+        <div class="topic" id="topic7">
+            <div class="card"><span class="time-badge">⏱️ 25 минути</span><h1>🛠️ Полезни инструменти за киберхигиена</h1>
+            <div class="definition-box">
+                <strong>🔧 Цел на тези инструменти:</strong> Да помогнат на учители, ученици и родители да повишат дигиталната си грамотност, да проверят сигурността на паролите и да разпознават заплахи.
+            </div>
+            <div class="tool-card"><strong>🔐 How Secure Is My Password?</strong> – <a href="https://howsecureismypassword.net" target="_blank" rel="noopener">howsecureismypassword.net</a> – проверява колко време би отнело на хакер да разбие вашата парола. Отличен за демонстрация защо "123456" се разбива за 0.0003 секунди.</div>
+            <div class="tool-card"><strong>🕵️ Have I Been Pwned</strong> – <a href="https://haveibeenpwned.com" target="_blank">haveibeenpwned.com</a> – проверява дали вашият имейл или парола са били компрометирани при известни изтичания на данни (над 13 милиарда записа).</div>
+            <div class="tool-card"><strong>🔏 Password Meter</strong> – <a href="https://www.passwordmeter.com" target="_blank">passwordmeter.com</a> – детайлен анализ на силата на парола с оценка по 10+ критерия.</div>
+            <div class="tool-card"><strong>🎮 Google Interland (на български)</strong> – <a href="https://beinternetawesome.withgoogle.com" target="_blank">beinternetawesome.withgoogle.com</a> – интерактивна образователна игра за деца от 1 до 6 клас с 4 свята: "Планината на вниманието", "Кулата на съкровищата", "Реката на истината", "Кралството на добротата".</div>
+            <div class="tool-card"><strong>🧪 Phishing Quiz (Google)</strong> – <a href="https://phishingquiz.withgoogle.com" target="_blank">phishingquiz.withgoogle.com</a> – интерактивен тест с 8 реални примера за имейли. Резултатът показва колко добре разпознавате фишинг.</div>
+            <div class="tool-card"><strong>📸 Detect Deepfake (MIT)</strong> – <a href="https://detectfakes.media.mit.edu" target="_blank">detectfakes.media.mit.edu</a> – практически упражнения за разпознаване на манипулирано с ИИ видео.</div>
+            <div class="tool-card"><strong>🛡️ VirusTotal</strong> – <a href="https://www.virustotal.com" target="_blank">virustotal.com</a> – проверка на файлове, линкове и хешове с повече от 70 антивирусни двигателя едновременно.</div>
+            <div class="tool-card"><strong>📚 Common Sense Education</strong> – <a href="https://www.commonsense.org/education" target="_blank">commonsense.org/education</a> – безплатни пълни уроци по дигитална грамотност за всички възрасти (на английски).</div>
+            <div class="tool-card"><strong>🔗 Safe.bg</strong> – <a href="https://safe.bg" target="_blank">safe.bg</a> – българският център за безопасен интернет с гореща линия за сигнали за незаконно съдържание.</div>
+            <div class="tool-card"><strong>📱 Родителски контрол:</strong> Google Family Link (Android/iOS), Apple Screen Time (iOS), Microsoft Family Safety (Windows), Qustodio (cross-platform).</div>
+            <div class="source-badge">📁 Актуални към 2025 г. Всички инструменти са безплатни или с безплатна версия.</div>
+        </div></div>
+
+        <!-- ТЕМА 9 AI и киберпрестъпления -->
+        <div class="topic" id="topic8">
+            <div class="card"><span class="time-badge">⏱️ 30 минути</span><h1>🤖 Изкуствен интелект и новите киберзаплахи (Поколение Алфа)</h1>
+            <div class="definition-box">
+                <strong>🤖 ИЗКУСТВЕН ИНТЕЛЕКТ (AI) В КИБЕРПРЕСТЪПЛЕНИЯТА:</strong> С развитието на генеративния AI (ChatGPT, Midjourney, ElevenLabs, Sora), киберпрестъпниците намират все повече начини да злоупотребяват с технологията.<br>
+                <strong>📊 СТАТИСТИКИ (2024):</strong>
+                • <span class="stat-highlight">300% ръст</span> на deepfake видеа в интернет за 2023-2024 г. (Sensity AI).<br>
+                • <span class="stat-highlight">85% от фишинг имейлите</span> вече са генерирани с AI (без правописни грешки).<br>
+                • <span class="stat-highlight">500% увеличение</span> на AI-генерираните фалшиви новини през 2024 г.<br>
+                • В България са регистрирани <span class="stat-highlight">12 опита за deepfake измами</span> през 2024 г. (ГДБОП).
+            </div>
+            <div class="two-columns"><div class="col">
+                <h3>🎭 DEEPFAKE ТЕХНОЛОГИЯ</h3>
+                <p>Фалшиви видеа или аудио записи, които изглеждат напълно истински. Създават се с помощта на GAN – две невронни мрежи се състезават: едната генерира фалшивото съдържание, другата се опитва да го разпознае.</p>
+                <p><strong>📌 ИЗВЕСТНИ СЛУЧАИ:</strong><br>
+                • <strong>2024 г., Хонконг:</strong> Фалшив CFO на компания използва deepfake видео за да накара служител да преведе <span class="stat-highlight">$25 млн.</span> чрез 5 видеообаждания.<br>
+                • <strong>2023 г., България:</strong> Опит за измама на фирма в София с deepfake глас на CEO за превод на 240 000 лв.<br>
+                • <strong>2024 г., САЩ:</strong> Deepfake видеа на Тейлър Суифт и Том Холанд, използвани за измами с криптовалута.</p>
+                <p><strong>🔍 КАК ДА РАЗПОЗНАЕМ DEEPFAKE:</strong><br>
+                • Неестествено или липсващо мигане (хората мигат средно 15-20 пъти в минута)<br>
+                • Несъответствия в осветлението и сенките<br>
+                • Странно движение на устните (не синхронизирани със звука)<br>
+                • Замъглени ръбове около лицето, артефакти (особено около очите)<br>
+                • Неестествен цвят на кожата или текстура<br>
+                • Липсващи зъби или нечетен брой пръсти</p>
+            </div><div class="col">
+                <h3>🤖 АВТОМАТИЗИРАН ФИШИНГ С CHATGPT</h3>
+                <p>С чатботове като ChatGPT, Gemini и Claude киберпрестъпниците генерират персонализирани фишинг имейли без правописни грешки, които са много по-трудни за разпознаване. Те могат да имитират стила на писане на конкретен човек или компания въз основа на няколко примерни имейла.</p>
+                <p><strong>📊 ФАКТ:</strong> Преди ChatGPT, 80% от фишинг имейлите имаха правописни грешки. Сега – под 20%.</p>
+                <h3>⚠️ ДРУГИ AI УГРОЗИ:</h3>
+                <ul>
+                    <li><strong>AI криптография</strong> – разбиване на пароли чрез модели</li>
+                    <li><strong>Злонамерени чатботове</strong> – имитират приятели/поддръжка</li>
+                    <li><strong>Генериране на фалшиви новини и дезинформация</strong> в мащаб</li>
+                    <li><strong>Voice cloning</strong> – клониране на глас от 30-секунден запис</li>
+                    <li><strong>AI за Captcha решаване</strong> – заобикаляне на защити</li>
+                </ul>
+            </div></div>
+            <div class="example">
+                <strong>🎭 РЕАЛЕН КАЗУС "Deepfake CEO в Zoom" (Хонконг, 2024 г.):</strong> Служител на мултинационална компания получава видеообаждане в Zoom от "финансовия директор" (който всъщност е deepfake). "Шефът" му нарежда спешен превод на $25 милиона по сметка на "доставчик", като използва убедителен глас и визуално изображение. Служителят изпълнява нареждането, тъй като вижда лицето и чува гласа. Ден по-късно открива, че е измамен. Полицията разкрива, че измамниците са използвали 5 отделни deepfake видеа, създадени от публични изяви на истинския CFO в YouTube.<br>
+                <div class="toggle-answer" onclick="toggleAnswer(this)">📌 Как да се защитим от deepfake атаки?</div>
+                <div class="answer-hidden">
+                    <div class="solution-box">
+                        <strong>✅ ПРОТОКОЛ ЗА ЗАЩИТА ОТ DEEPFAKE:</strong><br>
+                        1️⃣ <strong>ПРОВЕРКА ПО ДРУГ КАНАЛ</strong> – обадете се обратно на познатия номер, изпратете SMS с код за потвърждение.<br>
+                        2️⃣ <strong>ПРОТОКОЛ ЗА ГОЛЕМИ ТРАНЗАКЦИИ</strong> – двама души да заверят разговора (4-те очи принцип).<br>
+                        3️⃣ <strong>ОБУЧЕНИЕ ЗА РАЗПОЗНАВАНЕ</strong> – неестествено мигане, несъответствия в осветлението.<br>
+                        4️⃣ <strong>ПАРОЛИ-ФРАЗИ</strong> – предварително уговорени кодове при важни разговори.<br>
+                        5️⃣ <strong>БИОМЕТРИЧНИ ТЕХНОЛОГИИ</strong> – използване на приложения за проверка на живост.<br>
+                        6️⃣ <strong>ПРЕКРАТЕТЕ РАЗГОВОРА</strong> – при съмнение, прекратете и се обадете обратно на познатия номер.<br>
+                        <strong>🔧 ИНСТРУМЕНТИ:</strong> Microsoft Video Authenticator, Reality Defender, Sensity Deepfake Detection.
+                    </div>
+                </div>
+            </div>
+            <div class="quote">
+                <strong>💡 ЗАЩИТА ОТ AI-БАЗИРАНИ ЗАПЛАХИ (специално за Поколение Алфа):</strong><br>
+                • Развивайте <strong>критично мислене</strong> – не вярвайте на всичко, което виждате/чувате.<br>
+                • <strong>Проверявайте информацията</strong> по поне един друг канал.<br>
+                • Използвайте <strong>двуфакторно удостоверяване</strong> навсякъде.<br>
+                • Провеждайте редовно <strong>обучение за учители и ученици</strong> за новите заплахи.<br>
+                • За децата: <strong>„Ако нещо изглежда твърде странно, за да е истинско, вероятно не е истинско.“</strong>
+            </div>
+            <div class="source-badge">📁 Източници: Sensity AI (2024), ГДБОП, Europol (2024), MIT Detect Fakes, FBI IC3 Report 2024</div>
+        </div></div>
+
+        <!-- ТЕМА 10 ТЕСТ (20 въпроса) -->
+        <div class="topic" id="topic9">
+            <div class="card"><span class="time-badge">⏱️ 25 минути</span><h1>📝 Финален тест по киберсигурност (20 въпроса)</h1>
+            <div id="fullTest">
+                <!-- Въпроси 1-20 със запазване на оригиналната структура, но разширени -->
+                <div class="quiz-question"><strong>1. Какво представлява киберсигурността?</strong><br><label><input type="radio" name="test1" value="wrong"> a) Защита на физическите сгради и оборудване</label><br><label><input type="radio" name="test1" value="correct"> b) Защита на компютърните системи, мрежи и данни от неоторизиран достъп, атаки и повреди</label><br><label><input type="radio" name="test1" value="wrong"> c) Инсталиране на антивирусна програма веднъж годишно</label><br><span class="correct-answer">✅ Верен отговор: b</span></div>
+                <div class="quiz-question"><strong>2. Кое от следните НЕ се счита за лични данни по GDPR?</strong><br><label><input type="radio" name="test2" value="wrong"> a) Име и фамилия</label><br><label><input type="radio" name="test2" value="correct"> b) Текущото време навън и температурата на въздуха</label><br><label><input type="radio" name="test2" value="wrong"> c) IP адрес на устройството</label><br><span class="correct-answer">✅ Верен отговор: b</span></div>
+                <div class="quiz-question"><strong>3. Какво е фишинг (phishing)?</strong><br><label><input type="radio" name="test3" value="correct"> a) Опит за измама чрез фалшиви имейли, съобщения или сайтове с цел кражба на лични данни</label><br><label><input type="radio" name="test3" value="wrong"> b) Антивирусна програма за откриване на зловреден софтуер</label><br><label><input type="radio" name="test3" value="wrong"> c) Спортна дейност на открито</label><br><span class="correct-answer">✅ Верен отговор: a</span></div>
+                <div class="quiz-question"><strong>4. Кой е най-сигурният начин за съхранение на пароли?</strong><br><label><input type="radio" name="test4" value="correct"> a) Използване на мениджър за пароли и силна, уникална комбинация от букви, цифри и специални символи + двуфакторно удостоверяване</label><br><label><input type="radio" name="test4" value="wrong"> b) Записване на лист хартия залепен на монитора</label><br><label><input type="radio" name="test4" value="wrong"> c) Една и съща лесна парола за всички сайтове (напр. "123456")</label><br><span class="correct-answer">✅ Верен отговор: a</span></div>
+                <div class="quiz-question"><strong>5. Какво означава GDPR?</strong><br><label><input type="radio" name="test5" value="correct"> a) Общ регламент относно защитата на данните (General Data Protection Regulation) на Европейския съюз</label><br><label><input type="radio" name="test5" value="wrong"> b) Глобален софтуерен пакет за компютърна сигурност</label><br><label><input type="radio" name="test5" value="wrong"> c) Международен договор за борба с киберпрестъпленията</label><br><span class="correct-answer">✅ Верен отговор: a</span></div>
+                <div class="quiz-question"><strong>6. Кой е отговорен за защитата на личните данни в училище?</strong><br><label><input type="radio" name="test6" value="correct"> a) Всеки служител и учител, който обработва лични данни на ученици (оценки, досиета, снимки)</label><br><label><input type="radio" name="test6" value="wrong"> b) Само директорът на училището</label><br><label><input type="radio" name="test6" value="wrong"> c) Само външен ИТ специалист</label><br><span class="correct-answer">✅ Верен отговор: a</span></div>
+                <div class="quiz-question"><strong>7. Какво трябва да направите, ако получите подозрителен имейл, който твърди, че е от вашата банка?</strong><br><label><input type="radio" name="test7" value="correct"> a) Да го изтриете, без да отваряте линкове или прикачени файлове, и да уведомите ИТ отдела или банката си</label><br><label><input type="radio" name="test7" value="wrong"> b) Да кликнете веднага на линка, за да проверите дали е истински</label><br><label><input type="radio" name="test7" value="wrong"> c) Да препратите имейла на всичките си приятели, за да ги предупредите</label><br><span class="correct-answer">✅ Верен отговор: a</span></div>
+                <div class="quiz-question"><strong>8. Какво означава „правото да бъдеш забравен“ (right to be forgotten) по GDPR?</strong><br><label><input type="radio" name="test8" value="correct"> a) Правото да поискате изтриване на личните си данни, когато вече не са необходими за целите, за които са събрани</label><br><label><input type="radio" name="test8" value="wrong"> b) Да забравите паролата си за социалните мрежи</label><br><label><input type="radio" name="test8" value="wrong"> c) Да не публикувате нищо в интернет</label><br><span class="correct-answer">✅ Верен отговор: a</span></div>
+                <div class="quiz-question"><strong>9. Какво представлява двуфакторното удостоверяване (2FA)?</strong><br><label><input type="radio" name="test9" value="correct"> a) Два отделни метода за потвърждение на самоличността – например парола + еднократен код от SMS/приложение или биометрични данни</label><br><label><input type="radio" name="test9" value="wrong"> b) Две различни пароли, въвеждани една след друга</label><br><label><input type="radio" name="test9" value="wrong"> c) Два различни антивирусни програми, работещи едновременно</label><br><span class="correct-answer">✅ Верен отговор: a</span></div>
+                <div class="quiz-question"><strong>10. Коя институция контролира спазването на GDPR в България и налага глоби?</strong><br><label><input type="radio" name="test10" value="correct"> a) Комисията за защита на личните данни (КЗЛД)</label><br><label><input type="radio" name="test10" value="wrong"> b) Google и Facebook</label><br><label><input type="radio" name="test10" value="wrong"> c) Министерство на образованието и науката</label><br><span class="correct-answer">✅ Верен отговор: a</span></div>
+                <div class="quiz-question"><strong>11. Какво е deepfake?</strong><br><label><input type="radio" name="test11" value="correct"> a) Фалшиво видео, аудио или изображение, създадено с помощта на изкуствен интелект, което изглежда напълно истинско</label><br><label><input type="radio" name="test11" value="wrong"> b) Антивирусен софтуер от следващо поколение</label><br><label><input type="radio" name="test11" value="wrong"> c) Вид криптиране на данните</label><br><span class="correct-answer">✅ Верен отговор: a</span></div>
+                <div class="quiz-question"><strong>12. Какво представлява грумингът (онлайн хищничество / grooming)?</strong><br><label><input type="radio" name="test12" value="correct"> a) Възрастен се представя за дете или тийнейджър онлайн, за да спечели доверие и да установи емоционална връзка с цел сексуална злоупотреба или експлоатация</label><br><label><input type="radio" name="test12" value="wrong"> b) Компютърен вирус, който краде файлове и ги криптира</label><br><label><input type="radio" name="test12" value="wrong"> c) Техника за бързо четене на клавиатура</label><br><span class="correct-answer">✅ Верен отговор: a</span></div>
+                <div class="quiz-question"><strong>13. Коя е основната цел на антивирусните програми?</strong><br><label><input type="radio" name="test13" value="correct"> a) Да предотвратяват, откриват и премахват зловреден софтуер (вируси, троянци, рансъмуер, шпионски софтуер)</label><br><label><input type="radio" name="test13" value="wrong"> b) Да правят компютъра по-бърз и да изтриват ненужни файлове</label><br><label><input type="radio" name="test13" value="wrong"> c) Да скриват личните файлове от другите потребители на компютъра</label><br><span class="correct-answer">✅ Верен отговор: a</span></div>
+                <div class="quiz-question"><strong>14. Коя от следните мерки НЕ допринася за по-добра киберсигурност?</strong><br><label><input type="radio" name="test14" value="correct"> a) Споделяне на паролата с най-добрия приятел, за да може той да влиза в профила ви, когато нямате достъп</label><br><label><input type="radio" name="test14" value="wrong"> b) Редовно обновяване на софтуера и операционната система</label><br><label><input type="radio" name="test14" value="wrong"> c) Активиране на двуфакторно удостоверяване (2FA) за всички важни акаунти</label><br><span class="correct-answer">✅ Верен отговор: a</span></div>
+                <div class="quiz-question"><strong>15. Какво е дигитален отпечатък (digital footprint)?</strong><br><label><input type="radio" name="test15" value="correct"> a) Съвкупността от всички данни, които оставяме онлайн – публикации, коментари, снимки, история на търсенията, местоположения</label><br><label><input type="radio" name="test15" value="wrong"> b) Специална програма за защита на личните данни</label><br><label><input type="radio" name="test15" value="wrong"> c) Отпечатък от пръст, съхраняван в база данни</label><br><span class="correct-answer">✅ Верен отговор: a</span></div>
+                <div class="quiz-question"><strong>16. Какво означава „секстинг“ (sexting)?</strong><br><label><input type="radio" name="test16" value="correct"> a) Размяна на интимни снимки, видеа или текстови съобщения със сексуално съдържание</label><br><label><input type="radio" name="test16" value="wrong"> b) Вид онлайн игра</label><br><label><input type="radio" name="test16" value="wrong"> c) Социална мрежа за запознанства</label><br><span class="correct-answer">✅ Верен отговор: a</span></div>
+                <div class="quiz-question"><strong>17. Какво трябва да направите, ако станете жертва на онлайн изнудване (с интимни снимки)?</strong><br><label><input type="radio" name="test17" value="correct"> a) Да не плащате, да запазите всички доказателства (екранни снимки), да блокирате изнудвача и да уведомите родител/учител/полиция</label><br><label><input type="radio" name="test17" value="wrong"> b) Да изпратите исканата сума, за да се отървете от проблема</label><br><label><input type="radio" name="test17" value="wrong"> c) Да изтриете всички съобщения и да се надявате проблемът да изчезне сам</label><br><span class="correct-answer">✅ Верен отговор: a</span></div>
+                <div class="quiz-question"><strong>18. Кой е най-рисковата платформа за онлайн хищници (груминг) според статистиките?</strong><br><label><input type="radio" name="test18" value="correct"> a) Discord (34% от случаите)</label><br><label><input type="radio" name="test18" value="wrong"> b) Facebook (12%)</label><br><label><input type="radio" name="test18" value="wrong"> c) Instagram (15%)</label><br><span class="correct-answer">✅ Верен отговор: a</span></div>
+                <div class="quiz-question"><strong>19. Какво означава „смишинг“ (smishing)?</strong><br><label><input type="radio" name="test19" value="correct"> a) Фишинг чрез SMS съобщения (SMS phishing)</label><br><label><input type="radio" name="test19" value="wrong"> b) Антивирусна програма за мобилни телефони</label><br><label><input type="radio" name="test19" value="wrong"> c) Вид социална мрежа</label><br><span class="correct-answer">✅ Верен отговор: a</span></div>
+                <div class="quiz-question"><strong>20. Кога е безопасно да споделяте лична информация онлайн?</strong><br><label><input type="radio" name="test20" value="correct"> a) Само в защитени и удостоверени сайтове с HTTPS, когато е абсолютно необходимо за услугата, и след консултация с родител/учител</label><br><label><input type="radio" name="test20" value="wrong"> b) Винаги, когато сайтът изглежда професионално и има лого на позната марка</label><br><label><input type="radio" name="test20" value="wrong"> c) Когато някой в социалните мрежи ме моли за информация, особено ако твърди, че е служител на компанията</label><br><span class="correct-answer">✅ Верен отговор: a</span></div>
+                <button class="small-btn" id="submitFullTest">Провери теста (20 въпроса)</button>
+                <div id="testResult" style="margin-top:1rem; padding:0.8rem; background:rgba(0,0,0,0.4); border-radius:1rem;"></div>
+            </div>
+            <div class="source-badge">📁 Тестът покрива всички основни теми: киберсигурност, GDPR, фишинг, секстинг, груминг, deepfake, дигитален отпечатък.</div>
+        </div></div>
+
+        <!-- ТЕМА 11 въпроси за беседа (разширени) -->
+        <div class="topic" id="topic10">
+            <div class="card"><span class="time-badge">⏱️ 25 минути</span><h1>💬 Дискусионни въпроси за час на класа / родителска среща</h1>
+            <div class="definition-box">15 задълбочени въпроса за активна беседа, насочени към повишаване на дигиталната грамотност сред ученици, учители и родители. Всеки въпрос включва моделен отговор с най-важните акценти, базирани на актуалната практика и законодателство.</div>
+            <div class="lesson-plan"><strong>1. Кой носи отговорност, ако дете стане жертва на онлайн измама – родителят, учителят или самото дете?</strong><br><span class="correct-answer">✅ Отговорността е споделена и многостранна: родителите възпитават, следят и изграждат доверие; учителите обучават системно, дават знания и създават правила; децата трябва да развиват дигитална култура и критично мислене. Най-важна е откритата комуникация между трите страни и липсата на обвинителен тон към жертвата.</span></div>
+            <div class="lesson-plan"><strong>2. Нужно ли е учителите да следят онлайн активността на учениците в социалните мрежи? Каква е границата между закрила и накърняване на личното пространство?</strong><br><span class="correct-answer">✅ Не трябва да следят директно и систематично (това би нарушило личните граници и GDPR). Вместо това, учителите могат да насърчават етична употреба, да говорят открито за онлайн поведение в час, да реагират при получени сигнали за риск и да обучават как да се настройва поверителността в профилите.</span></div>
+            <div class="lesson-plan"><strong>3. Допустимо ли е да се използват безплатни онлайн или AI платформи в клас, които събират лични данни на ученици (напр. ChatGPT, Canva, Kahoot)?</strong><br><span class="correct-answer">✅ Само ако платформата отговаря на изискванията на GDPR (има политика за поверителност, съответстваща на европейското законодателство), има изрично информирано съгласие от родителите, не изисква чувствителни лични данни (ЕГН, точен адрес) и учителят обяснява на учениците как се използват данните им.</span></div>
+            <div class="lesson-plan"><strong>4. Можем ли да публикуваме снимки на ученици от училищни събития в интернет (уебсайт, Facebook страница, TikTok)?</strong><br><span class="correct-answer">✅ Само с писмено, информирано, доброволно и изрично съгласие от родителите (и от учениците над 14 години). При публикуване не трябва да се разкрива чувствителна информация (три имена, точен клас, местоживеене, диагнози). Без съгласие – това е нарушение на GDPR и училището подлежи на глоба от КЗЛД.</span></div>
+            <div class="lesson-plan"><strong>5. Знаят ли учениците (7-12 клас) какво означава „лични данни“? Кой трябва да ги научи на това?</strong><br><span class="correct-answer">✅ Проучванията показват, че повече от половината тийнейджъри нямат ясна представа кои данни се считат за лични и каква е защитата им. Учителите, в тясно партньорство с родителите, са отговорни за въвеждането на тези понятия още от началните класове (с примери и игри), като темата се надгражда всяка година.</span></div>
+            <div class="lesson-plan"><strong>6. Какви лични данни събират училищните платформи (Microsoft Teams, Google Classroom) и кой ги обработва?</strong><br><span class="correct-answer">✅ Обикновено събират: имена, имейли, оценки и обратна връзка, поведение, IP адреси, време на активност, данни за вход и изход, понякога снимки от профилите. Училището е администратор на лични данни и носи отговорност за тях. Учениците и родителите имат право на достъп до тези данни и тяхното изтриване след завършване на образованието.</span></div>
+            <div class="lesson-plan"><strong>7. Умеят ли децата (10-14 г.) да разпознават фалшиви профили и измамници в социалните мрежи? Как да ги научим?</strong><br><span class="correct-answer">✅ Обикновено не. Изследвания показват, че 65% от децата в тази възрастова група биха приели приятелска заявка от непознат, ако профилът изглежда автентичен. Обучението трябва да включва: проверка на датата на създаване на профила, брой и качество на приятели/последователи, наличие на снимки, търсене на профила в Google. Най-важното правило: "Ако не познаваш човека лично, не го добавяй."</span></div>
+            <div class="lesson-plan"><strong>8. Подготвени ли са българските учители да преподават киберсигурност и дигитална етика? Какво е необходимо?</strong><br><span class="correct-answer">✅ Голяма част от учителите (особено над 45 г.) не са преминали специализирано обучение по тези теми. Необходимо е включване на киберсигурността като задължителен модул в квалификационните курсове и програми за педагогическо развитие, както и създаване на училищни екипи по дигитална безопасност.</span></div>
+            <div class="lesson-plan"><strong>9. Какъв е точният протокол, когато ученик докладва, че е бил тормозен онлайн (получава заплахи, обиди, разпространение на лични снимки)?</strong><br><span class="correct-answer">✅ 1) Изслушване без осъждане и обвинения към жертвата. 2) Документиране – запазване на всички екранни снимки, чатове, URL адреси, дати и часове. 3) Уведомяване на директора на училището и на родителите на всички замесени. 4) Включване на училищния психолог за подкрепа на жертвата. 5) При нужда – сигнал до Детска педагогическа стая, ГДБОП (киберпрестъпления) и Национална линия 116111. 6) Провеждане на превантивна работа с целия клас (без да се назовава жертвата).</span></div>
+            <div class="lesson-plan"><strong>10. Кой подготвя учениците по-добре за реалностите на онлайн света – училището или социалните мрежи (TikTok, Instagram, YouTube)?</strong><br><span class="correct-answer">✅ Социалните мрежи имат огромно влияние, което често е негативно – те награждават рисковото поведение, бързата реакция, емоционалните изблици и създават "ехо камери". Училището обаче може да даде критично мислене, дигитална хигиена, правила и етични ориентири. Необходимо е активно, осъзнато и системно участие на учителя в този процес, а не еднократни лекции.</span></div>
+            <div class="lesson-plan"><strong>11. Какви са конкретните рискове на приложенията за съобщения (Viber, Messenger, WhatsApp, Discord, Telegram) в училищен контекст?</strong><br><span class="correct-answer">✅ Основните рискове включват: кибертормоз в групови чатове, разпространение на интимни снимки и видеа без съгласие ("реваншизъм"), създаване на изключващи групи (булинг), контакт с непознати (Discord е най-рисковата платформа за груминг), споделяне на лична информация, дезинформация и фалшиви новини. Необходимо е обучение за настройките за поверителност и родителски контрол.</span></div>
+            <div class="lesson-plan"><strong>12. Трябва ли всяко училище да има официална, писмена политика за дигитална сигурност и киберсигурност? Какво трябва да включва тя?</strong><br><span class="correct-answer">✅ Да – това е не само препоръчително, а задължително съгласно изискванията на GDPR и Закона за закрила на детето. Политиката трябва да включва: правила за използване на лични устройства в училище, процедури за докладване на инциденти, санкции при нарушения, отговорници за различните нива на реакция, протокол за уведомяване на родители и институции, план за обучение на персонала и учениците, и годишен одит на изпълнението.</span></div>
+            <div class="lesson-plan"><strong>13. Какво точно означава "интернет хигиена" и как можем да я преподаваме на учениците по достъпен и ангажиращ начин?</strong><br><span class="correct-answer">✅ Интернет хигиената включва добри навици онлайн: използване на силни и уникални пароли (с мениджър на пароли), редовно обновяване на софтуера и операционната система, проверка на източниците на информация (латерално четене), защита на профилите (настройки за поверителност), разпознаване и докладване на фишинг, ограничаване на споделяната лична информация. Преподаваме чрез реални примери, казуси, ролеви игри и практически упражнения (напр. "Потърси се в Google").</span></div>
+            <div class="lesson-plan"><strong>14. Според вашия опит, какъв процент от родителите наистина осъзнават рисковете в интернет и активно подкрепят училището в превенцията? Как да включим повече родители?</strong><br><span class="correct-answer">✅ За съжаление, голяма част от родителите (особено тези с по-ниска дигитална грамотност) подценяват темата, като често смятат, че "на моето дете няма да се случи" или че "то знае какво прави". Необходимо е да ги ангажираме чрез редовни родителски срещи с конкретни казуси, демонстрации на рискове (напр. колко информация излиза при търсене на името на детето), информационни кампании (бюлетини, whatsapp групи), съвместни обучения и създаване на "Родителски киберпатрул".</span></div>
+            <div class="lesson-plan"><strong>15. Как можем да изградим устойчива култура на киберсигурност в училище – такава, която да не зависи от един ентусиазиран учител, а да бъде институционална?</strong><br><span class="correct-answer">✅ Чрез системен, многостепенен подход: 1) Задължително обучение на всички учители (включено в годишните квалификации). 2) Създаване на училищен "Кибер екип" – 3-4 учители + 2-3 ученици, които да са лица за контакт. 3) Въвеждане на "Седмица на киберсигурността" веднъж годишно. 4) Включване на темите в учебните програми по информационни технологии, философия, психология и час на класа. 5) Сътрудничество с външни експерти (ГДБОП, Safe.bg, родители ИТ специалисти). 6) Редовен мониторинг на климата чрез анонимни анкети. 7) Видими напомняния в училищната среда (плакати, екранни съобщения, стикери на лаптопите).</span></div>
+            <div class="source-badge">📁 Дискусионни въпроси с моделни отговори за учители, ученици и родители. Източници: GDPRhub, Safe.bg, Common Sense Education.</div>
+        </div></div>
+    </div>
+</div>
+
+<script>
+    function switchTopic(index) {
+        document.querySelectorAll('.topic').forEach((t, i) => {
+            t.classList.toggle('active-topic', i === index);
+        });
+        document.querySelectorAll('.topic-btn').forEach((btn, i) => {
+            btn.classList.toggle('active', i === index);
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.querySelectorAll('.topic-btn').forEach((btn, idx) => {
+        btn.addEventListener('click', () => switchTopic(idx));
+    });
+
+    function toggleAnswer(element) {
+        let hiddenDiv = element.nextElementSibling;
+        if (hiddenDiv.classList.contains('answer-hidden')) {
+            hiddenDiv.classList.remove('answer-hidden');
+            hiddenDiv.classList.add('answer-visible');
+            element.innerHTML = '📌 Скрий отговора';
+        } else {
+            hiddenDiv.classList.remove('answer-visible');
+            hiddenDiv.classList.add('answer-hidden');
+            element.innerHTML = '📌 Виж решение и отговор';
+        }
+    }
+    window.toggleAnswer = toggleAnswer;
+
+    document.getElementById('submitFullTest')?.addEventListener('click', () => {
+        let score = 0;
+        for (let i = 1; i <= 20; i++) {
+            let selected = document.querySelector(`input[name="test${i}"]:checked`);
+            if (selected && selected.value === 'correct') score++;
+        }
+        let percent = (score / 20) * 100;
+        let msg = `🎯 Имате ${score} от 20 верни отговора (${percent}%). `;
+        if (percent >= 90) msg += '🌟 Отличен резултат! Вие сте много добре подготвен(а) учител по киберсигурност.';
+        else if (percent >= 70) msg += '👍 Добра работа, но прегледайте отново модулите за фишинг, GDPR и deepfake.';
+        else msg += '📘 Препоръчваме да преминете през всички теми отново и да използвате материалите за обучение.';
+        document.getElementById('testResult').innerHTML = msg;
+    });
+</script>
+</body>
+</html>
